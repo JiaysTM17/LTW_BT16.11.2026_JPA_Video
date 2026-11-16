@@ -1,0 +1,23 @@
+target/
+*.class
+
+# Log files
+*.log
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Visual Studio Code
+.vscode/
+
+# OS metadata
+Thumbs.db
+Desktop.ini
+.DS_Store
