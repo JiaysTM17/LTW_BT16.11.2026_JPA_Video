@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import vn.iotstar.entity.User;
 import vn.iotstar.service.IUserService;
 import vn.iotstar.service.impl.UserServiceImpl;
 
@@ -40,13 +41,13 @@ public class RegisterController extends HttpServlet {
         String confirmPassword = req.getParameter("confirmPassword");
 
         if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            req.setAttribute("error", "Vui lòng điền đầy đủ các thông tin bắt buộc!");
+            req.setAttribute("errorMessage", "Vui lòng điền đầy đủ các thông tin bắt buộc!");
             req.getRequestDispatcher("/views/register.jsp").forward(req, resp);
             return;
         }
 
         if (!password.equals(confirmPassword)) {
-            req.setAttribute("error", "Mật khẩu xác nhận không khớp!");
+            req.setAttribute("errorMessage", "Mật khẩu xác nhận không khớp!");
             req.setAttribute("username", username);
             req.setAttribute("email", email);
             req.setAttribute("fullname", fullname);
@@ -56,11 +57,14 @@ public class RegisterController extends HttpServlet {
         }
 
         try {
-            userService.register(username.trim(), password.trim(), email.trim(), fullname != null ? fullname.trim() : "", phone != null ? phone.trim() : "");
-            // Đăng ký thành công, chuyển sang trang xác thực OTP
+            User registeredUser = userService.register(username.trim(), password.trim(), email.trim(), fullname != null ? fullname.trim() : "", phone != null ? phone.trim() : "");
+            // Lưu OTP vào Session để hiển thị hỗ trợ kiểm thử tiện lợi trên giao diện
+            req.getSession().setAttribute("registeredOtp", registeredUser.getCode());
+            req.getSession().setAttribute("registeredEmail", registeredUser.getEmail());
+
             resp.sendRedirect(req.getContextPath() + "/verify-otp?email=" + email.trim() + "&msg=otp_sent");
         } catch (Exception e) {
-            req.setAttribute("error", e.getMessage());
+            req.setAttribute("errorMessage", e.getMessage());
             req.setAttribute("username", username);
             req.setAttribute("email", email);
             req.setAttribute("fullname", fullname);

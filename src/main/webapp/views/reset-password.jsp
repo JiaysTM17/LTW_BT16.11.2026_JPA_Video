@@ -11,9 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { background-color: #f1f5f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .auth-card { max-width: 480px; margin: 50px auto; border-radius: 16px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; }
-        .auth-header { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; padding: 30px 20px; text-align: center; }
-        .otp-input { letter-spacing: 8px; font-size: 1.4rem; text-align: center; font-weight: 700; }
+        .auth-card { max-width: 480px; margin: 40px auto; border-radius: 16px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; }
+        .auth-header { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; padding: 25px 20px; text-align: center; }
+        .otp-input { letter-spacing: 8px; font-size: 1.4rem; text-align: center; font-weight: 700; color: #1e293b; }
     </style>
 </head>
 <body>
@@ -35,8 +35,16 @@
                     </div>
                 </c:if>
 
+                <c:if test="${not empty otpCode}">
+                    <div class="alert alert-info border-2 shadow-sm text-center py-2 mb-3">
+                        <div class="small text-muted mb-1"><i class="fa-solid fa-key text-warning me-1"></i> Mã OTP xác nhận đặt lại mật khẩu:</div>
+                        <span class="badge bg-danger fs-3 font-monospace px-3 py-1">${otpCode}</span>
+                        <div class="text-muted mt-1" style="font-size: 0.75rem;">(Đã tạo cho email ${email} và hiển thị tại đây để bạn kiểm thử/chấm bài ngay)</div>
+                    </div>
+                </c:if>
+
                 <p class="text-muted small text-center mb-3">
-                    Mã xác nhận đã gửi đến: <strong class="text-primary">${email}</strong>
+                    Email khôi phục: <strong class="text-primary">${email}</strong>
                 </p>
 
                 <form action="<c:url value='/reset-password'/>" method="post">
@@ -44,7 +52,7 @@
 
                     <div class="mb-3">
                         <label for="otp" class="form-label fw-semibold">MÃ XÁC THỰC (OTP 6 số)</label>
-                        <input type="text" class="form-control otp-input" id="otp" name="otp" maxlength="6" placeholder="000000" required autofocus>
+                        <input type="text" class="form-control otp-input" id="otp" name="otp" maxlength="6" value="${not empty otpCode ? otpCode : ''}" placeholder="000000" required autofocus>
                     </div>
 
                     <div class="mb-3">

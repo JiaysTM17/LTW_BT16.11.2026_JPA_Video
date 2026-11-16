@@ -10,6 +10,8 @@
 CREATE DATABASE IF NOT EXISTS servletjpa CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE servletjpa;
 
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- 2. TẠO BẢNG USERS (Hỗ trợ xác thực OTP, BCrypt Password)
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -77,3 +79,5 @@ VALUES
 ('vid10', N'Deploy ứng dụng Jakarta EE lên Apache Tomcat 10.1', N'Đóng gói file WAR và triển khai ứng dụng thực tế trên Server.', 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4', 1890, 1, 3, 1),
 ('vid11', N'Tối ưu hóa kết nối JPA và quản lý EntityManagerFactory', N'Thiết kế Singleton Pattern cho JPAConfig đảm bảo Thread-safe.', 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4', 430, 1, 1, 2)
 ON DUPLICATE KEY UPDATE VideoId=VideoId;
+
+SET FOREIGN_KEY_CHECKS = 1;

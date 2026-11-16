@@ -41,29 +41,19 @@
             <div class="col-lg-8">
                 <!-- Video Player Box (Yêu cầu 4.4: Play 01 video khi bấm vào tiêu đề) -->
                 <div class="video-player-container">
-                    <c:choose>
-                        <c:when test="${video.videoUrl != null && video.videoUrl.startsWith('http')}">
-                            <!-- Link video trực tuyến (mp4 trực tiếp) -->
-                            <video id="videoPlayer" controls autoplay poster="<c:choose><c:when test='${video.poster != null && video.poster.startsWith(\"http\")}'>${video.poster}</c:when><c:otherwise><c:url value='/image?fname=${video.poster}'/></c:otherwise></c:choose>">
-                                <source src="${video.videoUrl}" type="video/mp4">
-                                Trình duyệt của bạn không hỗ trợ thẻ phát video HTML5.
-                            </video>
-                        </c:when>
-                        <c:when test="${video.videoUrl != null && !video.videoUrl.isEmpty()}">
-                            <!-- File video upload cục bộ thông qua servlet stream /file?fname=... -->
-                            <video id="videoPlayer" controls autoplay poster="<c:choose><c:when test='${video.poster != null && video.poster.startsWith(\"http\")}'>${video.poster}</c:when><c:otherwise><c:url value='/image?fname=${video.poster}'/></c:otherwise></c:choose>">
-                                <source src="<c:url value='/file?fname=${video.videoUrl}'/>" type="video/mp4">
-                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                                Trình duyệt của bạn không hỗ trợ thẻ phát video HTML5.
-                            </video>
-                        </c:when>
-                        <c:otherwise>
-                            <!-- Demo Video Fallback -->
-                            <video id="videoPlayer" controls autoplay poster="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800">
-                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                            </video>
-                        </c:otherwise>
-                    </c:choose>
+                    <video id="videoPlayer" controls autoplay style="width: 100%; max-height: 550px; background: #000; display: block; border-radius: 16px;" poster="<c:choose><c:when test='${video.poster != null && video.poster.startsWith(\"http\")}'>${video.poster}</c:when><c:otherwise>${pageContext.request.contextPath}/image?fname=${video.poster}</c:otherwise></c:choose>">
+                        <c:if test="${not empty video.videoUrl && !video.videoUrl.startsWith('http')}">
+                            <source src="${pageContext.request.contextPath}/file?fname=${video.videoUrl}" type="video/mp4">
+                        </c:if>
+                        <c:if test="${not empty video.videoUrl && video.videoUrl.startsWith('http')}">
+                            <source src="${video.videoUrl}" type="video/mp4">
+                        </c:if>
+                        <!-- Fallback video cục bộ luôn sẵn sàng phát 100% -->
+                        <source src="${pageContext.request.contextPath}/file?fname=demo.mp4" type="video/mp4">
+                        <source src="${pageContext.request.contextPath}/assets/demo.mp4" type="video/mp4">
+                        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+                        Trình duyệt của bạn không hỗ trợ thẻ phát video HTML5.
+                    </video>
                 </div>
 
                 <!-- Video Metadata -->
